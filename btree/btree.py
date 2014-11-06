@@ -7,7 +7,7 @@
 
 from mystack import MyStack
 from myqueue import MyQueue
-from person import Person
+#from person import Person
 from copy import deepcopy
 import sys
 
@@ -362,19 +362,19 @@ def main():
     
     print( ' # run #2 -------------------------------' )
     t = BTree(1)
-    t.insert(Person('Joe', 38))
-    t.insert(Person('Susie',48))
-    t.insert(Person('Billy',39))
-    t.insert(Person('Tomas',12))
-    t.insert(Person('Don',35))
-    t.update(Person('Willy', 12))
-    print( t.retrieve(Person('', 48)) )
-    print( t )
+    # t.insert(Person('Joe', 38))
+    # t.insert(Person('Susie',48))
+    # t.insert(Person('Billy',39))
+    # t.insert(Person('Tomas',12))
+    # t.insert(Person('Don',35))
+    # t.update(Person('Willy', 12))
+    # print( t.retrieve(Person('', 48)) )
+    # print( t )
 
-    t.levelByLevel(sys.stdout)
-    t.inorderOn(sys.stdout)
-    t.delete(Person('',35))
-    t.inorderOn(sys.stdout)
+    # t.levelByLevel(sys.stdout)
+    # t.inorderOn(sys.stdout)
+    # t.delete(Person('',35))
+    # t.inorderOn(sys.stdout)
     
 
     print( ' # run#3 -------------------------------' )
