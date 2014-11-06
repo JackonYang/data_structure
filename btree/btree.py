@@ -86,7 +86,6 @@ class BTreeNode:
         '''
         pass
       
-     
     def insertItem(self, anItem, left = None, right = None):  
         ''' We assume that the receiver is not full. anItem is
           inserted into the receiver with child indices left and
