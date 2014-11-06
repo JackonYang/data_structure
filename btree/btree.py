@@ -160,6 +160,9 @@ class BTreeNode:
 
     def setNumberOfKeys(self, anInt ):
         self.numberOfKeys = anInt
+    
+    def getNumberOfKeys(self):
+        return self.numberOfKeys
 
 class BTree:
     '''  Comment about the class BTree!!
@@ -210,12 +213,26 @@ class BTree:
         '''
         pass
 
+    def isRoot(self, idx):
+        return self.rootIndex == idx
+
+    def addInRoot(self, anItem):
+        if not self.rootNode.isFull():
+            print 'add in root'
+            self.rootNode.insertItem(anItem)
+        else:
+            print 'root full'
+
     def insert(self, anItem):
         ''' Answer None if the BTree already contains a matching
           item. If not, insert a deep copy of anItem and answer
           anItem.
         '''
-        pass
+        position = self.searchTree(anItem)
+        if position['found']:
+            return None
+        if self.isRoot(position['nodeIndex']):
+            return self.rootNode
         
     def levelByLevel(self, aFile):
         ''' Print the nodes of the BTree level-by-level on aFile.
@@ -255,7 +272,21 @@ class BTree:
           (or the node containing a match).  Again, the rootnode
           is pushed if it is not a leaf node and has no match.
         '''
-        pass
+        cur_node = self.readFrom(self.rootIndex)
+        status = cur_node.searchNode(anItem)
+        if status['found']:
+            status['fileIndex'] = cur_node.index
+            return status
+        while cur_node.index is not None:
+            cur_node = self.readFrom(cur_node.child[status['nodeIndex']])
+            if cur_node is None:
+                return status
+            status = cur_node.searchNode(anItem)
+            if status['found']:
+                break
+        status['fileIndex'] = cur_node.index
+        return status
+
 
     def update(self, anItem):
         ''' If found, update the item with a matching key to be a
@@ -326,7 +357,6 @@ def main():
     print( n.addItemAndSplit(32,4,13) )# Try adding 10, 36, ... 
     print( n )
 
-    return
     
     # This next part is useful for deletion
     n = BTreeNode(4)
@@ -349,9 +379,11 @@ def main():
     print( "Run 5" )
     print( m )
 
+
     new = n.copyWithRight(m,p) 
     print( "Run 6" )
     print( new )
+
     
     print('Test the BTree class:')
     
@@ -361,6 +393,8 @@ def main():
     bt.insert(27)
     bt.insert(35)
     print( bt )
+
+    return
 
     bt.insert(98)
     bt.insert(201)

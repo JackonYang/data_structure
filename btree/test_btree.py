@@ -1,5 +1,6 @@
 # -*- coding: utf-8-*-
 import unittest
+from btree import BTree
 
 class test_btree(unittest.TestCase):
 
@@ -10,7 +11,10 @@ class test_btree(unittest.TestCase):
         pass
 
     def test_is_root(self):
-        self.assertEquals(1, 1)
+        bt = BTree(1)
+        self.assertTrue(bt.isRoot(1))
+        self.assertFalse(bt.isRoot(0))
+        self.assertFalse(bt.isRoot(3))
 
 if __name__=='__main__':
     suite=unittest.TestSuite()
