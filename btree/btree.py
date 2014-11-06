@@ -218,7 +218,6 @@ class BTree:
 
     def addInRoot(self, anItem):
         if not self.rootNode.isFull():
-            print 'add in root'
             self.rootNode.insertItem(anItem)
         else:
             print 'root full'
