@@ -45,7 +45,17 @@ class BTreeNode:
           returned. Note that the last child of the receiver
           and the first child of the new node will be the same.
         '''
-        pass
+        if not self.isFull():
+            print( 'Error in addItemAndSplit' )
+            return None
+
+        degree = len(self.items) / 2
+
+        n = BTreeNode(degree)
+        n.copyItemsAndChildren(self, degree+1, self.numberOfKeys, None)
+        n.insertItem(anItem, left, right)
+        self.setNumberOfKeys(degree+1)
+        return n
 
     def childIndexOf(self, anIndex):
         '''  Answer the index of the child, in the receiver,
@@ -288,7 +298,6 @@ def main():
     print( "Run 2" )
     print( b )
 
-    return
 
     n = BTreeNode(1)
     n.index = 12
@@ -310,6 +319,8 @@ def main():
     print( n )
     print( n.addItemAndSplit(32,4,13) )# Try adding 10, 36, ... 
     print( n )
+
+    return
     
     # This next part is useful for deletion
     n = BTreeNode(4)
