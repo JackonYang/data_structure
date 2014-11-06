@@ -85,7 +85,13 @@ class BTreeNode:
           index start to finish, along with the next child.  The
           copying within the receiver begins at position index.
         '''
-        pass
+        for i in range(start, finish):
+            self.items[i-start] = fromNode.items[i]
+            self.child[i-start] = fromNode.child[i]
+
+        self.child[finish-start] = fromNode.child[finish]
+        self.numberOfKeys = finish - start
+        self.index = index
     
     def copyWithRight(self, aNode, parentNode):  
         '''Answer a node which contains all the items and children
