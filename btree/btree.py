@@ -100,8 +100,9 @@ class BTreeNode:
           aNode are left and right siblings with respect to an
           item within the parentNode.
         '''
-        pass
-      
+        cur_node = self.copyItemsAndChildren(self, 0, self.getNumberOfKeys(), None)
+        return cur_node
+
     def insertItem(self, anItem, left = None, right = None):  
         ''' We assume that the receiver is not full. anItem is
           inserted into the receiver with child indices left and
