@@ -92,6 +92,15 @@ class BTreeNode:
         self.child[finish-start] = fromNode.child[finish]
         self.numberOfKeys = finish - start
         self.index = index
+
+    def extendItemsAndChildren(self, fromNode, start, delta, copyChild=True):
+        for i in range(delta):
+            self.items[self.getNumberOfKeys()+i] = fromNode.items[start+i]
+        if copyChild:
+            for i in range(delta+1):
+                self.child[self.getNumberOfKeys()+i] = fromNode.child[start+i]
+
+        self.numberOfKeys += delta
     
     def copyWithRight(self, aNode, parentNode):  
         '''Answer a node which contains all the items and children
@@ -100,8 +109,13 @@ class BTreeNode:
           aNode are left and right siblings with respect to an
           item within the parentNode.
         '''
-        cur_node = self.copyItemsAndChildren(self, 0, self.getNumberOfKeys(), None)
-        return cur_node
+        degree = (self.getNumberOfKeys() + aNode.getNumberOfKeys() + 2) / 2
+
+        n = BTreeNode(degree)
+        n.copyItemsAndChildren(self, 0, self.getNumberOfKeys(), None)
+        n.extendItemsAndChildren(parentNode, 0, 1, False)
+        n.extendItemsAndChildren(aNode, 0, aNode.getNumberOfKeys(), True)
+        return n
 
     def insertItem(self, anItem, left = None, right = None):  
         ''' We assume that the receiver is not full. anItem is
