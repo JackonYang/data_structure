@@ -94,7 +94,13 @@ class BTreeNode:
           the key of the item.  If the insertion is successful,
           answer True.  If not, answer False.
         '''
-        pass
+        if self.isFull():
+            return False
+
+        self.items[self.numberOfKeys] = anItem
+        self.numberOfKeys += 1
+        self.items = sorted(self.items[:self.numberOfKeys]) + self.items[self.numberOfKeys:]
+        return True
 
     def isFull(self):
         ''' Answer True if the receiver is full.  If not, return
@@ -271,7 +277,6 @@ def main():
     print( n.searchNode(40) )
     print( '' )
 
-    return
     
     b = BTreeNode(3)
     b.index = 133
@@ -284,6 +289,7 @@ def main():
     print( "Run 2" )
     print( b )
 
+    return
 
     n = BTreeNode(1)
     n.index = 12
