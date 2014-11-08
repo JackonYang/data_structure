@@ -246,6 +246,7 @@ class BTree:
     '''
     def __init__(self, degree):
         # This method is complete.
+        degree = int(degree)
         self.degree = degree
         self.rootNode = BTreeNode(degree)
         
@@ -288,8 +289,8 @@ class BTree:
         if pos_node.isUnderFlow() and not self.stackOfNodes.isEmpty():
             parent = self.stackOfNodes.pop()
             # right first.
-            bro = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
-            print bro
+            bro, isLhs = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
+            print(bro, isLhs)
         return pos_node
 
     def inorderOn(self, aFile):
