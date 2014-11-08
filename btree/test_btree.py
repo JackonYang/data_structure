@@ -30,7 +30,7 @@ class test_btree_node(unittest.TestCase):
         m.setNumberOfKeys(4)
         m.setIndex(7)
 
-        print n.copyWithRight(m,p) 
+        # print n.copyWithRight(m,p) 
 
     def test_isLeaf(self):
         n = BTreeNode(4)
@@ -77,7 +77,10 @@ if __name__=='__main__':
 
     runner=unittest.TextTestRunner()
     runner.run(suite)
+
     suite.addTest(test_btree_node('test_copyWithRight'))
+    suite.addTest(test_btree_node('test_isLeaf'))
+
     suite.addTest(test_btree('test_is_root'))
     suite.addTest(test_btree('test_add_in_root'))
     runner=unittest.TextTestRunner()

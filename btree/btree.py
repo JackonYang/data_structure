@@ -37,7 +37,7 @@ class BTreeNode:
         return st
 
     def isLeaf(self):
-        return bool(self.child[0])
+        return not bool(self.child[0])
 
     def addItemAndSplit(self, anItem, left, right):
         ''' 
