@@ -284,6 +284,14 @@ class BTree:
                 # update root info
                 self.rootNode = parent
                 self.rootIndex = self.rootNode.index
+            else:
+                new_parent = self.stackOfNodes.pop()
+                if not new_parent.isFull():
+                    new_parent.insertItem(parent.items[0])
+                    # update child info
+                else:
+                    pass
+                    # add and split new_parent
             return anItem
 
     def levelByLevel(self, aFile):
