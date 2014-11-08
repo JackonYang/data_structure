@@ -289,19 +289,21 @@ class BTree:
           (or the node containing a match).  Again, the rootnode
           is pushed if it is not a leaf node and has no match.
         '''
-        cur_node = self.readFrom(self.rootIndex)
+        cur_node = self.rootNode
+
         status = cur_node.searchNode(anItem)
         if status['found']:
             status['fileIndex'] = cur_node.index
             return status
-        while cur_node.index is not None:
+
+        while not cur_node.isLeaf():  # search child
             cur_node = self.readFrom(cur_node.child[status['nodeIndex']])
-            if cur_node is None:
+            if cur_node is None:  # error
                 return status
             status = cur_node.searchNode(anItem)
             if status['found']:
                 break
-        status['fileIndex'] = cur_node.index
+        status['fileIndex'] = cur_node.index  # stop idx
         return status
 
 
