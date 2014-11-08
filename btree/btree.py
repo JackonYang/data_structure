@@ -243,12 +243,6 @@ class BTree:
     def isRoot(self, idx):
         return self.rootIndex == idx
 
-    def addInRoot(self, anItem):
-        if not self.rootNode.isFull():
-            self.rootNode.insertItem(anItem)
-        else:
-            print 'root full'
-
     def insert(self, anItem):
         ''' Answer None if the BTree already contains a matching
           item. If not, insert a deep copy of anItem and answer
