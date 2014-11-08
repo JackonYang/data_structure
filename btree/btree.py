@@ -19,6 +19,7 @@ class BTreeNode:
     '''
     def __init__(self, degree = 1):
         ''' Create an empty node with the indicated degree.'''
+        degree = int(degree)
         self.numberOfKeys = 0
         self.items = [None]*2*degree
         self.child = [None]*(2*degree+1)
@@ -58,7 +59,7 @@ class BTreeNode:
         add_to_right = postion['nodeIndex'] > degree
 
         n = BTreeNode(degree)
-        n.copyItemsAndChildren(self, degree+add_to_right, self.numberOfKeys, 0)
+        n.copyItemsAndChildren(self, degree+add_to_right, self.getNumberOfKeys(), 0)
 
         if add_to_right:  # add in new node
             self.setNumberOfKeys(degree+1)
@@ -74,8 +75,8 @@ class BTreeNode:
         degree = len(self.items) / 2
 
         n = BTreeNode(degree)
-        n.copyItemsAndChildren(self, self.numberOfKeys-1, self.numberOfKeys, 0)
-        self.numberOfKeys -= 1
+        n.copyItemsAndChildren(self, self.getNumberOfKeys()-1, self.getNumberOfKeys(), 0)
+        self.setNumberOfKeys(self.getNumberOfKeys()-1)
         return n
 
     def childIndexOf(self, anIndex):
@@ -86,7 +87,7 @@ class BTreeNode:
         index = -1
         found = False
         k = 0
-        while not found and k <= self.numberOfKeys:
+        while not found and k <= self.getNumberOfKeys():
             if self.child[k] == anIndex:
                 found = True
                 index = k
@@ -103,7 +104,7 @@ class BTreeNode:
         if inverse and childIdx > 0:
             return self.child[childIdx-1], inverse
 
-        if not inverse and childIdx < self.numberOfKeys:
+        if not inverse and childIdx < self.getNumberOfKeys():
             return self.child[childIdx+1], inverse
 
         return None, inverse
@@ -119,14 +120,14 @@ class BTreeNode:
           copying within the receiver begins at position index.
         '''
 
-        self.numberOfKeys = index + finish - start
+        self.setNumberOfKeys(index + finish - start)
         
-        for i in range(finish-start):
-            self.items[index+i] = fromNode.items[start+i]
-            self.child[index+i] = fromNode.child[start+i]
+        for i in range(int(finish-start)):
+            self.items[int(index+i)] = fromNode.items[int(start+i)]
+            self.child[int(index+i)] = fromNode.child[int(start+i)]
 
         # next child. 1 more child than items
-        self.child[self.numberOfKeys] = fromNode.child[finish]
+        self.child[self.getNumberOfKeys()] = fromNode.child[finish]
 
     def extendItemsAndChildren(self, fromNode, start, delta, copyChild=True):
         for i in range(delta):
@@ -135,7 +136,7 @@ class BTreeNode:
             for i in range(delta+1):
                 self.child[self.getNumberOfKeys()+i] = fromNode.child[start+i]
 
-        self.numberOfKeys += delta
+        self.setNumberOfKeys(self.getNumberOfKeys()+delta)
     
     def copyWithRight(self, aNode, parentNode):  
         '''Answer a node which contains all the items and children
@@ -167,9 +168,9 @@ class BTreeNode:
         if self.isFull():
             return False
 
-        self.items[self.numberOfKeys] = anItem
-        self.numberOfKeys += 1
-        self.items = sorted(self.items[:self.numberOfKeys]) + self.items[self.numberOfKeys:]
+        self.items[self.getNumberOfKeys()] = anItem
+        self.setNumberOfKeys(self.getNumberOfKeys()+1)
+        self.items = sorted(self.items[:self.getNumberOfKeys()]) + self.items[self.getNumberOfKeys():]
         if left is None and right is None:  # all None
             return True
         if left and right:  # no None
@@ -185,13 +186,13 @@ class BTreeNode:
         ''' Answer True if the receiver is full.  If not, return
           False.
         '''
-        return (self.numberOfKeys == len(self.items))
+        return (self.getNumberOfKeys() == len(self.items))
 
     def isUnderFlow(self):
         ''' Answer True if the receiver is underflow.
         If not, return False.
         '''
-        return (self.numberOfKeys < len(self.items)/2)
+        return (self.getNumberOfKeys() < len(self.items)/2)
 
     def removeChild(self, index):
         ''' If index is valid, remove and answer the child at
@@ -208,12 +209,12 @@ class BTreeNode:
           gap.  Update the key count.  If the index is not valid,
           answer None.
         '''
-        if index >= self.numberOfKeys or index < 0:  # TODO.bottom 
+        if index >= self.getNumberOfKeys() or index < 0:  # TODO.bottom 
             return None
 
         target = self.items[index]
-        self.numberOfKeys -= 1
-        for i in range(index, self.numberOfKeys):
+        self.setNumberOfKeys(self.getNumberOfKeys()-1)
+        for i in range(index, self.getNumberOfKeys()):
             self.items[i] = self.items[i+1]
         return target
 
@@ -228,7 +229,7 @@ class BTreeNode:
           where the object is, or should go if there is room in the node.
         '''
         import bisect
-        position = bisect.bisect_left(self.items[:self.numberOfKeys], anItem)
+        position = bisect.bisect_left(self.items[:self.getNumberOfKeys()], anItem)
         found = position < len(self.items) and anItem == self.items[position]
         return {'nodeIndex': position, 'found': found}
 
@@ -236,10 +237,10 @@ class BTreeNode:
         self.index = anInteger
 
     def setNumberOfKeys(self, anInt ):
-        self.numberOfKeys = anInt
+        self.numberOfKeys = int(anInt)
     
     def getNumberOfKeys(self):
-        return self.numberOfKeys
+        return int(self.numberOfKeys)
 
 class BTree:
     '''  Comment about the class BTree!!
