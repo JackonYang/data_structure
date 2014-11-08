@@ -187,7 +187,7 @@ class BTreeNode:
           where the object is, or should go if there is room in the node.
         '''
         import bisect
-        position = bisect.bisect_left(self.items, anItem)
+        position = bisect.bisect_left(self.items[:self.numberOfKeys], anItem)
         found = position < len(self.items) and anItem == self.items[position]
         return {'nodeIndex': position, 'found': found}
 
@@ -281,7 +281,7 @@ class BTree:
                 parent.child[1] = right_child.index
                 self.writeAt(parent.index, parent)
             return anItem
-        
+
     def levelByLevel(self, aFile):
         ''' Print the nodes of the BTree level-by-level on aFile.
         '''
