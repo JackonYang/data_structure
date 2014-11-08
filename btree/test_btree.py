@@ -49,6 +49,19 @@ class test_btree_node(unittest.TestCase):
         m = BTreeNode(4)
         self.assertTrue(m.isLeaf())
 
+    def test_addItemAndSplit(self):
+        import copy
+        n = BTreeNode(2)
+        n.items[0:4] = [15,20,30,35]
+        n.child[0:5] = [1,2,3,4,5]
+        n.numberOfKeys = 4
+        n.index = 10
+        temp = copy.deepcopy(n)
+        temp.addItemAndSplit(32,4,13)
+        temp = copy.deepcopy(n)
+        temp.addItemAndSplit(10,4,13)
+        temp = copy.deepcopy(n)
+        temp.addItemAndSplit(36,4,13)
  
 class test_btree(unittest.TestCase):
 
@@ -89,6 +102,7 @@ if __name__=='__main__':
     runner.run(suite)
 
     suite.addTest(test_btree_node('test_copyWithRight'))
+    suite.addTest(test_btree_node('test_addItemAndSplit'))
     suite.addTest(test_btree_node('test_isLeaf'))
 
     suite.addTest(test_btree('test_is_root'))
