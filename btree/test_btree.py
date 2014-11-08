@@ -135,6 +135,20 @@ class test_btree(unittest.TestCase):
         bt.insert(98)
         bt.insert(201)
 
+    def test_add_insert_split_parent(self):
+        bt = BTree(1)
+        bt.insert(50)
+        bt.insert(27)
+        bt.insert(35)
+        bt.insert(98)
+        bt.insert(201)
+
+        bt.insert(73)
+        bt.insert(29)
+        bt.insert(150)
+        bt.insert(15)
+        print( bt )
+
     def test_add_insert_full_d2(self):
         bt = BTree(2)
         bt.insert(50)
@@ -165,5 +179,6 @@ if __name__=='__main__':
     suite.addTest(test_btree('test_add_insert_full_d2'))
 
     suite.addTest(test_btree('test_add_insert_deep'))
+    suite.addTest(test_btree('test_add_insert_split_parent'))
     runner=unittest.TextTestRunner()
     runner.run(suite)

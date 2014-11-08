@@ -298,6 +298,7 @@ class BTree:
                 self.writeAt(right_child.index, right_child)
 
                 parent = new_parent.splitLast()
+            pos_node = new_parent
 
         if parent is not None:  # new root
             parent.index = self.freeIndex
