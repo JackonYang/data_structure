@@ -77,6 +77,9 @@ class test_btree_node(unittest.TestCase):
         self.assertEqual(temp.items[:3], [15, 20, 30])
         self.assertEqual(temp.numberOfKeys, 3)
         self.assertEqual(new_node.items, [35, 36, None, None])
+
+    def test_insertItem(self):
+        pass
  
 class test_btree(unittest.TestCase):
 
@@ -144,6 +147,7 @@ if __name__=='__main__':
 
     suite.addTest(test_btree_node('test_copyWithRight'))
     suite.addTest(test_btree_node('test_addItemAndSplit'))
+    suite.addTest(test_btree_node('test_insertItem'))
     suite.addTest(test_btree_node('test_isLeaf'))
 
     suite.addTest(test_btree('test_is_root'))
