@@ -89,6 +89,15 @@ class test_btree_node(unittest.TestCase):
         b.insertItem(300, 11, 12)
         self.assertEqual(b.items, [100, 150, 200, 300, 500, 700])
         self.assertEqual(b.child, [19, 10, 50, 11, 12, 70, 18])
+
+    def test_splitLast(self):
+        n = BTreeNode(2)
+        n.items[0:8] = [15,35,None,None]
+        n.child[0:9] = [1,4,5,None,None]
+        n.numberOfKeys = 2
+        m = n.splitLast()
+        self.assertEqual(m.items, [35, None, None, None])
+        self.assertEqual(m.child, [4, 5, None, None, None])
  
 
 class test_btree(unittest.TestCase):
@@ -172,6 +181,7 @@ if __name__=='__main__':
     suite.addTest(test_btree_node('test_addItemAndSplit'))
     suite.addTest(test_btree_node('test_insertItem'))
     suite.addTest(test_btree_node('test_isLeaf'))
+    suite.addTest(test_btree_node('test_splitLast'))
 
     suite.addTest(test_btree('test_is_root'))
     suite.addTest(test_btree('test_add_insert_not_full'))
