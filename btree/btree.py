@@ -271,36 +271,46 @@ class BTree:
             return None
 
         pos_node = self.readFrom(position['fileIndex'])
+
+        # add Only
         if not pos_node.isFull():
             pos_node.insertItem(anItem)
-        else:
-            # right child
-            right_child = pos_node.addItemAndSplit(anItem, None, None)
-            right_child.index = self.freeIndex
-            self.freeIndex += 1
-            self.writeAt(right_child.index, right_child)
-
-            # parent child
-            parent = pos_node.splitLast()
-
-            if self.stackOfNodes.isEmpty():
-                parent.index = self.freeIndex
-                self.freeIndex += 1
-                parent.child[0] = pos_node.index
-                parent.child[1] = right_child.index
-                self.writeAt(parent.index, parent)
-
-                # update root info
-                self.rootNode = parent
-                self.rootIndex = self.rootNode.index
-            else:
-                new_parent = self.stackOfNodes.pop()
-                if not new_parent.isFull():
-                    new_parent.insertItem(parent.items[0], pos_node.index, right_child.index)
-                else:
-                    pass
-                    # add and split new_parent
             return anItem
+
+        # add, split
+        right_child = pos_node.addItemAndSplit(anItem, None, None)
+        right_child.index = self.freeIndex
+        self.freeIndex += 1
+        self.writeAt(right_child.index, right_child)
+
+        # add parent Iteratively
+        parent = pos_node.splitLast()
+        while not self.stackOfNodes.isEmpty():  # not root
+            new_parent = self.stackOfNodes.pop()
+            if not new_parent.isFull():
+                new_parent.insertItem(parent.items[0], pos_node.index, right_child.index)
+                parent = None
+                break
+            else:  # split new_parent and go on looping
+                right_child = new_parent.addItemAndSplit(parent.items[0], pos_node.index, right_child.index)
+                right_child.index = self.freeIndex
+                self.freeIndex += 1
+                self.writeAt(right_child.index, right_child)
+
+                parent = new_parent.splitLast()
+
+        if parent is not None:  # new root
+            parent.index = self.freeIndex
+            self.freeIndex += 1
+            parent.child[0] = pos_node.index
+            parent.child[1] = right_child.index
+            self.writeAt(parent.index, parent)
+
+            # update root info
+            self.rootNode = parent
+            self.rootIndex = self.rootNode.index
+
+        return anItem
 
     def levelByLevel(self, aFile):
         ''' Print the nodes of the BTree level-by-level on aFile.
@@ -470,13 +480,14 @@ def main():
     bt.insert(201)
     print( bt )
 
-    return
 
     bt.insert(73)
     bt.insert(29)
     bt.insert(150)
     bt.insert(15)
     print( bt )
+
+    return
 
     bt.insert(64)
     print( bt )
