@@ -56,12 +56,21 @@ class test_btree_node(unittest.TestCase):
         n.child[0:5] = [1,2,3,4,5]
         n.numberOfKeys = 4
         n.index = 10
+
+        # add 32
         temp = copy.deepcopy(n)
-        temp.addItemAndSplit(32,4,13)
+        new_node = temp.addItemAndSplit(32, 4, 13)
+        self.assertEqual(new_node.items, [32, 35, None, None])
+
+        # add 10
         temp = copy.deepcopy(n)
-        temp.addItemAndSplit(10,4,13)
+        new_node = temp.addItemAndSplit(10, 4, 13)
+        self.assertEqual(new_node.items, [30, 35, None, None])
+
+        # add 36
         temp = copy.deepcopy(n)
-        temp.addItemAndSplit(36,4,13)
+        new_node = temp.addItemAndSplit(36, 4, 13)
+        self.assertEqual(new_node.items, [35, 36, None, None])
  
 class test_btree(unittest.TestCase):
 

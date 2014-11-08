@@ -55,11 +55,15 @@ class BTreeNode:
         postion = self.searchNode(anItem)
         degree = len(self.items) / 2
 
-        print postion, degree
+        add_to_right = postion['nodeIndex'] > degree
 
         n = BTreeNode(degree)
-        n.copyItemsAndChildren(self, degree+1, self.numberOfKeys, 0)
-        n.insertItem(anItem, left, right)
+        n.copyItemsAndChildren(self, degree+add_to_right, self.numberOfKeys, 0)
+
+        if add_to_right:  # add in new node
+            n.insertItem(anItem, left, right)
+        else:
+            self.insertItem(anItem, left, right)
         self.setNumberOfKeys(degree+1)
         return n
 
@@ -93,7 +97,7 @@ class BTreeNode:
         '''
 
         self.numberOfKeys = index + finish - start
-
+        
         for i in range(finish-start):
             self.items[index+i] = fromNode.items[start+i]
             self.child[index+i] = fromNode.child[start+i]
@@ -120,7 +124,7 @@ class BTreeNode:
         degree = (self.getNumberOfKeys() + aNode.getNumberOfKeys() + 2) / 2
 
         n = BTreeNode(degree)
-        n.copyItemsAndChildren(self, 0, self.getNumberOfKeys(), None)
+        n.copyItemsAndChildren(self, 0, self.getNumberOfKeys(), 0)
         n.extendItemsAndChildren(parentNode, 0, 1, False)
         n.extendItemsAndChildren(aNode, 0, aNode.getNumberOfKeys(), True)
         return n
