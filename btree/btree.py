@@ -36,6 +36,9 @@ class BTreeNode:
         st += str(self.child[self.numberOfKeys]) + '\n'
         return st
 
+    def isLeaf(self):
+        return bool(self.child[0])
+
     def addItemAndSplit(self, anItem, left, right):
         ''' 
           If the receiver is not full, generate an error.

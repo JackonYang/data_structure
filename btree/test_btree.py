@@ -31,6 +31,24 @@ class test_btree_node(unittest.TestCase):
         m.setIndex(7)
 
         print n.copyWithRight(m,p) 
+
+    def test_isLeaf(self):
+        n = BTreeNode(4)
+        n.items[0:8] = [15,20,30,35,None,None,None,None]
+        n.child[0:9] = [1,2,3,4,5,None,None,None,None]
+        n.numberOfKeys = 4
+        self.assertFalse(n.isLeaf())
+
+        p = BTreeNode(1)
+        p.items[0:8] = [40,50]
+        p.child[0:9] = [6,7,8]
+        p.setNumberOfKeys(2)
+        p.setIndex(17)
+        self.assertFalse(p.isLeaf())
+
+        m = BTreeNode(4)
+        self.assertTrue(m.isLeaf())
+
  
 class test_btree(unittest.TestCase):
 
