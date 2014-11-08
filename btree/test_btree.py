@@ -141,7 +141,6 @@ if __name__=='__main__':
     suite=unittest.TestSuite()
 
     runner=unittest.TextTestRunner()
-    runner.run(suite)
 
     suite.addTest(test_btree_node('test_copyWithRight'))
     suite.addTest(test_btree_node('test_addItemAndSplit'))
