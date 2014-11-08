@@ -60,16 +60,22 @@ class test_btree_node(unittest.TestCase):
         # add 32
         temp = copy.deepcopy(n)
         new_node = temp.addItemAndSplit(32, 4, 13)
+        self.assertEqual(temp.items[:3], [15, 20, 30])
+        self.assertEqual(temp.numberOfKeys, 3)
         self.assertEqual(new_node.items, [32, 35, None, None])
 
         # add 10
         temp = copy.deepcopy(n)
         new_node = temp.addItemAndSplit(10, 4, 13)
+        self.assertEqual(temp.items[:3], [10, 15, 20])
+        self.assertEqual(temp.numberOfKeys, 3)
         self.assertEqual(new_node.items, [30, 35, None, None]) 
 
         # add 36
         temp = copy.deepcopy(n)
         new_node = temp.addItemAndSplit(36, 4, 13)
+        self.assertEqual(temp.items[:3], [15, 20, 30])
+        self.assertEqual(temp.numberOfKeys, 3)
         self.assertEqual(new_node.items, [35, 36, None, None])
  
 class test_btree(unittest.TestCase):

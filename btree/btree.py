@@ -61,10 +61,11 @@ class BTreeNode:
         n.copyItemsAndChildren(self, degree+add_to_right, self.numberOfKeys, 0)
 
         if add_to_right:  # add in new node
+            self.setNumberOfKeys(degree+1)
             n.insertItem(anItem, left, right)
         else:
+            self.setNumberOfKeys(degree)
             self.insertItem(anItem, left, right)
-        self.setNumberOfKeys(degree+1)
         return n
 
     def splitLast(self):
