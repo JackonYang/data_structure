@@ -280,6 +280,10 @@ class BTree:
                 parent.child[0] = pos_node.index
                 parent.child[1] = right_child.index
                 self.writeAt(parent.index, parent)
+
+                # update root info
+                self.rootNode = parent
+                self.rootIndex = self.rootNode.index
             return anItem
 
     def levelByLevel(self, aFile):
