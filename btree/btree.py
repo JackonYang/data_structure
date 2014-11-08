@@ -170,6 +170,12 @@ class BTreeNode:
         '''
         return (self.numberOfKeys == len(self.items))
 
+    def isUnderFlow(self):
+        ''' Answer True if the receiver is underflow.
+        If not, return False.
+        '''
+        return (self.numberOfKeys < len(self.items)/2)
+
     def removeChild(self, index):
         ''' If index is valid, remove and answer the child at
           location index.  If not, answer None.  In any event,
@@ -258,6 +264,7 @@ class BTree:
         ''' Print the items of the subtree of the BTree, which is
           rooted at index, in inorder on aFile.
         '''
+
         pass
 
     def isRoot(self, idx):
@@ -506,7 +513,6 @@ def main():
     bt.insert(84)
     print( bt )
     
-    return
     
     print( ' # run #2 -------------------------------' )
     t = BTree(1)
@@ -574,6 +580,8 @@ def main():
     bt.insert(24)
     bt.insert(45)
     bt.insert(25)
+    print( bt )
+    return
     bt.delete(35)
     bt.delete(38)
     bt.delete(25)
