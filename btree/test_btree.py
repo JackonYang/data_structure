@@ -65,7 +65,7 @@ class test_btree_node(unittest.TestCase):
         # add 10
         temp = copy.deepcopy(n)
         new_node = temp.addItemAndSplit(10, 4, 13)
-        self.assertEqual(new_node.items, [30, 35, None, None])
+        self.assertEqual(new_node.items, [30, 35, None, None]) 
 
         # add 36
         temp = copy.deepcopy(n)
