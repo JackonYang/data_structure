@@ -151,7 +151,16 @@ class BTreeNode:
         self.items[self.numberOfKeys] = anItem
         self.numberOfKeys += 1
         self.items = sorted(self.items[:self.numberOfKeys]) + self.items[self.numberOfKeys:]
-        return True
+        if left is None and right is None:  # all None
+            return True
+        if left and right:  # no None
+            position = self.items.index(anItem)
+            for child_idx in range(position+2, len(self.child)):
+                self.child[child_idx] = self.child[child_idx-1]
+            self.child[position] = left
+            self.child[position+1] = right
+            return True
+        return False
 
     def isFull(self):
         ''' Answer True if the receiver is full.  If not, return
@@ -287,8 +296,7 @@ class BTree:
             else:
                 new_parent = self.stackOfNodes.pop()
                 if not new_parent.isFull():
-                    new_parent.insertItem(parent.items[0])
-                    # update child info
+                    new_parent.insertItem(parent.items[0], pos_node.index, right_child.index)
                 else:
                     pass
                     # add and split new_parent
