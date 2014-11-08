@@ -63,9 +63,11 @@ class BTreeNode:
         if add_to_right:  # add in new node
             self.setNumberOfKeys(degree+1)
             n.insertItem(anItem, left, right)
+            self.child[self.getNumberOfKeys()] = n.child[0]
         else:
             self.setNumberOfKeys(degree)
             self.insertItem(anItem, left, right)
+            n.child[0] = self.child[self.getNumberOfKeys()]
         return n
 
     def splitLast(self):

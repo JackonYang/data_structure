@@ -78,6 +78,33 @@ class test_btree_node(unittest.TestCase):
         self.assertEqual(temp.numberOfKeys, 3)
         self.assertEqual(new_node.items, [35, 36, None, None])
 
+        n = BTreeNode(1)
+        n.items = [64, 89]
+        n.child= [2, 8, 4]
+        n.numberOfKeys = 2
+        n.index = 6
+        rhs = n.addItemAndSplit(83, 7, 9)
+        self.assertEqual(n.items, [64, 83])
+        self.assertEqual(n.child, [2, 7, 9])
+        self.assertEqual(n.numberOfKeys, 2)
+        self.assertEqual(rhs.items, [89, None])
+        self.assertEqual(rhs.child, [9, 4, None])
+
+        lhs = BTreeNode(1)
+        lhs.items = [64, 89]
+        lhs.child= [2, 8, 4]
+        lhs.numberOfKeys = 2
+        lhs.index = 6
+        rhs = lhs.addItemAndSplit(93, 7, 9)
+        self.assertEqual(lhs.items, [64, 89])
+        self.assertEqual(lhs.child, [2, 8, 7])
+        self.assertEqual(lhs.numberOfKeys, 2)
+        self.assertEqual(rhs.items, [93, None])
+        self.assertEqual(rhs.child, [7, 9, None])
+        self.assertEqual(rhs.numberOfKeys, 1)
+
+
+
     def test_insertItem(self):
         b = BTreeNode(3)
         b.index = 133
