@@ -273,8 +273,13 @@ class BTree:
 
             # parent child
             parent = pos_node.splitLast()
-            parent.index = self.freeIndex
-            self.freeIndex += 1
+
+            if self.stackOfNodes.isEmpty():
+                parent.index = self.freeIndex
+                self.freeIndex += 1
+                parent.child[0] = pos_node.index
+                parent.child[1] = right_child.index
+                self.writeAt(parent.index, parent)
             print parent
             print pos_node
             print right_child
@@ -324,7 +329,8 @@ class BTree:
         if status['found']:
             status['fileIndex'] = cur_node.index
             return status
-
+        
+        self.stackOfNodes.clear()
         while not cur_node.isLeaf():  # search child
             cur_node = self.readFrom(cur_node.child[status['nodeIndex']])
             if cur_node is None:  # error
@@ -332,6 +338,8 @@ class BTree:
             status = cur_node.searchNode(anItem)
             if status['found']:
                 break
+            else:
+                self.stackOfNodes.push(cur_node)
         status['fileIndex'] = cur_node.index  # stop idx
         return status
 
