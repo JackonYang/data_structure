@@ -99,14 +99,14 @@ class BTreeNode:
     def findNext(self, node_idx, inverse=False):
         childIdx = self.childIndexOf(node_idx)
         if childIdx < 0:
-            return None
+            return None, inverse
         if inverse and childIdx > 0:
-            return self.child[childIdx-1]
+            return self.child[childIdx-1], inverse
 
         if not inverse and childIdx < self.numberOfKeys:
-            return self.child[childIdx+1]
+            return self.child[childIdx+1], inverse
 
-        return None
+        return None, inverse
 
     def clear(self):
         self.numberOfKeys = 0

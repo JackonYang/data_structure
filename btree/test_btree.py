@@ -72,14 +72,14 @@ class test_btree_node(unittest.TestCase):
         n.child[0:9] = [101, 102, 103, 104, 105, None, None, None, None]
         n.numberOfKeys = 4
 
-        self.assertEquals(n.findNext(103), 104)
-        self.assertEquals(n.findNext(103, inverse=True), 102)
+        self.assertEquals(n.findNext(103), (104, False))
+        self.assertEquals(n.findNext(103, inverse=True), (102, True))
 
         # boundary check
-        self.assertEquals(n.findNext(104), 105)
-        self.assertEquals(n.findNext(102, inverse=True), 101)
-        self.assertEquals(n.findNext(105), None)
-        self.assertEquals(n.findNext(101, inverse=True), None)
+        self.assertEquals(n.findNext(104), (105, False))
+        self.assertEquals(n.findNext(102, inverse=True), (101, True))
+        self.assertEquals(n.findNext(105), (None, False))
+        self.assertEquals(n.findNext(101, inverse=True), (None, True))
         # comment below to avoid printing info msg
         #self.assertEquals(n.findNext(100, inverse=True), None)
         #self.assertEquals(n.findNext(100, inverse=False), None)
