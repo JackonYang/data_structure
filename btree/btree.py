@@ -67,6 +67,14 @@ class BTreeNode:
         self.setNumberOfKeys(degree+1)
         return n
 
+    def splitLast(self):
+        degree = len(self.items) / 2
+
+        n = BTreeNode(degree)
+        n.copyItemsAndChildren(self, self.numberOfKeys-1, self.numberOfKeys, 0)
+        self.numberOfKeys -= 1
+        return n
+
     def childIndexOf(self, anIndex):
         '''  Answer the index of the child, in the receiver,
           which contains anIndex.  Print an error message if
@@ -256,6 +264,12 @@ class BTree:
         if not pos_node.isFull():
             pos_node.insertItem(anItem)
         else:
+            # right child
+            right_child = pos_node.addItemAndSplit(anItem, None, None)
+            right_child.index = self.freeIndex
+
+            # parent child
+            parent = pos_node.splitLast()
             return 'full'
         
     def levelByLevel(self, aFile):
