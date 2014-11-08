@@ -113,6 +113,16 @@ class test_btree(unittest.TestCase):
         res = bt.insert(35)
         self.assertEqual(res, 35)
 
+    def test_add_insert_deep(self):
+        bt = BTree(1)
+        bt.insert(50)
+        bt.insert(27)
+        res = bt.insert(35)
+        self.assertEqual(res, 35)  # full, root
+        bt.insert(98)
+        print bt
+        bt.insert(201)
+
     def test_add_insert_full_d2(self):
         bt = BTree(2)
         bt.insert(50)
@@ -141,5 +151,7 @@ if __name__=='__main__':
     suite.addTest(test_btree('test_add_insert_not_full'))
     suite.addTest(test_btree('test_add_insert_full'))
     suite.addTest(test_btree('test_add_insert_full_d2'))
+
+    suite.addTest(test_btree('test_add_insert_deep'))
     runner=unittest.TextTestRunner()
     runner.run(suite)
