@@ -268,9 +268,16 @@ class BTree:
             # right child
             right_child = pos_node.addItemAndSplit(anItem, None, None)
             right_child.index = self.freeIndex
+            self.freeIndex += 1
+            self.writeAt(right_child.index, right_child)
 
             # parent child
             parent = pos_node.splitLast()
+            parent.index = self.freeIndex
+            self.freeIndex += 1
+            print parent
+            print pos_node
+            print right_child
             return 'full'
         
     def levelByLevel(self, aFile):
