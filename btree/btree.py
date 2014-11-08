@@ -300,7 +300,7 @@ class BTree:
                 self.writeAt(right_child.index, right_child)
 
                 parent = new_parent.splitLast()
-            pos_node = new_parent
+                pos_node = new_parent
 
         if parent is not None:  # new root
             parent.index = self.freeIndex
@@ -490,7 +490,6 @@ def main():
     bt.insert(15)
     print( bt )
 
-    return
 
     bt.insert(64)
     print( bt )
@@ -503,9 +502,11 @@ def main():
     bt.insert(253)
     print( bt )
 
+
     bt.insert(84)
     print( bt )
     
+    return
     
     print( ' # run #2 -------------------------------' )
     t = BTree(1)
