@@ -191,7 +191,14 @@ class BTreeNode:
           gap.  Update the key count.  If the index is not valid,
           answer None.
         '''
-        pass
+        if index >= self.numberOfKeys or index < 0:  # TODO.bottom 
+            return None
+
+        target = self.readFrom(index)
+        self.numberOfKeys -= 1
+        for i in range(index, self.numberOfKeys):
+            self.items[i] = self.items[i+1]
+        return target
 
     def searchNode(self, anItem):
         '''Answer a dictionary satisfying: at 'found'
