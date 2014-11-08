@@ -262,10 +262,13 @@ class BTree:
             return None
 
         pos_node = self.readFrom(position['fileIndex'])
+        leaf_item = position['nodeIndex']
 
-        if pos_node.isLeaf():
-            pos_node.removeItem(position['nodeIndex'])
-            return pos_node
+        if not pos_node.isLeaf():
+            pass
+
+        pos_node.removeItem(leaf_item)
+        return pos_node
 
     def inorderOn(self, aFile):
         '''
