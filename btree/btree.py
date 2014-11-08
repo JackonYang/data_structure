@@ -248,8 +248,12 @@ class BTree:
         position = self.searchTree(anItem)
         if position['found']:
             return None
-        if self.isRoot(position['nodeIndex']):
-            return self.rootNode
+
+        pos_node = self.readFrom(position['fileIndex'])
+        if not pos_node.isFull():
+            pos_node.insertItem(anItem)
+        else:
+            return 'full'
         
     def levelByLevel(self, aFile):
         ''' Print the nodes of the BTree level-by-level on aFile.

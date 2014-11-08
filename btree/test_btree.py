@@ -72,6 +72,16 @@ class test_btree(unittest.TestCase):
         self.assertEqual(bt.rootNode.items, [27, 50])
         bt.addInRoot(35)
 
+    def test_add_insert_not_full(self):
+        bt = BTree(1)
+        bt.insert(50)
+        self.assertEqual(bt.rootNode.items, [50, None])
+        bt.insert(27)
+        self.assertEqual(bt.rootNode.items, [27, 50])
+
+        res = bt.insert(30)
+        self.assertEqual(res, 'full')
+
 if __name__=='__main__':
     suite=unittest.TestSuite()
 
@@ -83,5 +93,6 @@ if __name__=='__main__':
 
     suite.addTest(test_btree('test_is_root'))
     suite.addTest(test_btree('test_add_in_root'))
+    suite.addTest(test_btree('test_add_insert_not_full'))
     runner=unittest.TextTestRunner()
     runner.run(suite)
