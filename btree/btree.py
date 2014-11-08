@@ -194,7 +194,7 @@ class BTreeNode:
         if index >= self.numberOfKeys or index < 0:  # TODO.bottom 
             return None
 
-        target = self.readFrom(index)
+        target = self.items[index]
         self.numberOfKeys -= 1
         for i in range(index, self.numberOfKeys):
             self.items[i] = self.items[i+1]
@@ -256,7 +256,16 @@ class BTree:
         ''' Answer None if a matching item is not found.  If found,
           answer the entire item.  
         '''
-        pass  
+
+        position = self.searchTree(anItem)
+        if not position['found']:
+            return None
+
+        pos_node = self.readFrom(position['fileIndex'])
+
+        if pos_node.isLeaf():
+            pos_node.removeItem(position['nodeIndex'])
+            return pos_node
 
     def inorderOn(self, aFile):
         '''

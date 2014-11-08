@@ -198,7 +198,7 @@ class test_btree(unittest.TestCase):
         bt.insert(29)
         bt.insert(150)
         bt.insert(15)
-        print( bt )
+        # print( bt )
 
     def test_add_insert_full_d2(self):
         bt = BTree(2)
@@ -213,6 +213,32 @@ class test_btree(unittest.TestCase):
 
         res = bt.insert(10)
         self.assertEqual(res, 10)
+
+    def test_del_leaf_not_underflow(self):
+        bt = BTree(2)
+        bt.insert(20)
+        bt.insert(40)
+        bt.insert(10)
+        bt.insert(30)
+        bt.insert(15)
+        bt.insert(35)
+        bt.insert(7)
+        bt.insert(26)
+        bt.insert(18)
+        bt.insert(22)
+        bt.insert(5)
+        bt.insert(42)
+        bt.insert(13)
+        bt.insert(46)
+        bt.insert(27)
+        bt.insert(8)
+        bt.insert(32)
+        bt.insert(38)
+        bt.insert(24)
+        bt.insert(45)
+        bt.insert(25)
+        bt.delete(35)
+        print( bt )
 
 if __name__=='__main__':
     suite=unittest.TestSuite()
@@ -233,5 +259,6 @@ if __name__=='__main__':
 
     suite.addTest(test_btree('test_add_insert_deep'))
     suite.addTest(test_btree('test_add_insert_split_parent'))
+    suite.addTest(test_btree('test_del_leaf_not_underflow'))
     runner=unittest.TextTestRunner()
     runner.run(suite)
