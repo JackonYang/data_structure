@@ -79,8 +79,19 @@ class test_btree_node(unittest.TestCase):
         self.assertEqual(new_node.items, [35, 36, None, None])
 
     def test_insertItem(self):
-        pass
+        b = BTreeNode(3)
+        b.index = 133
+        b.insertItem(500, 19, 21)
+        b.insertItem(150, 31, 43)
+        b.insertItem(200, 50, 62)
+        b.insertItem(700, 70, 18)
+        b.insertItem(100, 19, 10)
+        b.insertItem(300, 11, 12)
+        print( b )
+        return
+        print( b )
  
+
 class test_btree(unittest.TestCase):
 
     def setUp(self):

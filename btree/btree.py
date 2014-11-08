@@ -155,7 +155,7 @@ class BTreeNode:
             return True
         if left and right:  # no None
             position = self.items.index(anItem)
-            for child_idx in range(position+2, len(self.child)):
+            for child_idx in range(len(self.child)-1, position+1, -1):
                 self.child[child_idx] = self.child[child_idx-1]
             self.child[position] = left
             self.child[position+1] = right
