@@ -87,9 +87,8 @@ class test_btree_node(unittest.TestCase):
         b.insertItem(700, 70, 18)
         b.insertItem(100, 19, 10)
         b.insertItem(300, 11, 12)
-        print( b )
-        return
-        print( b )
+        self.assertEqual(b.items, [100, 150, 200, 300, 500, 700])
+        self.assertEqual(b.child, [19, 10, 50, 11, 12, 70, 18])
  
 
 class test_btree(unittest.TestCase):
