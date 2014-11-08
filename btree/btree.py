@@ -52,10 +52,13 @@ class BTreeNode:
             print( 'Error in addItemAndSplit' )
             return None
 
+        postion = self.searchNode(anItem)
         degree = len(self.items) / 2
 
+        print postion, degree
+
         n = BTreeNode(degree)
-        n.copyItemsAndChildren(self, degree+1, self.numberOfKeys, None)
+        n.copyItemsAndChildren(self, degree+1, self.numberOfKeys, 0)
         n.insertItem(anItem, left, right)
         self.setNumberOfKeys(degree+1)
         return n
@@ -88,13 +91,15 @@ class BTreeNode:
           index start to finish, along with the next child.  The
           copying within the receiver begins at position index.
         '''
-        for i in range(start, finish):
-            self.items[i-start] = fromNode.items[i]
-            self.child[i-start] = fromNode.child[i]
 
-        self.child[finish-start] = fromNode.child[finish]
-        self.numberOfKeys = finish - start
-        self.index = index
+        self.numberOfKeys = index + finish - start
+
+        for i in range(finish-start):
+            self.items[index+i] = fromNode.items[start+i]
+            self.child[index+i] = fromNode.child[start+i]
+
+        # next child. 1 more child than items
+        self.child[self.numberOfKeys] = fromNode.child[finish]
 
     def extendItemsAndChildren(self, fromNode, start, delta, copyChild=True):
         for i in range(delta):
