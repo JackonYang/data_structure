@@ -333,14 +333,13 @@ class BTree:
         
         self.stackOfNodes.clear()
         while not cur_node.isLeaf():  # search child
+            self.stackOfNodes.push(cur_node)  # save and go saerch
             cur_node = self.readFrom(cur_node.child[status['nodeIndex']])
             if cur_node is None:  # error
                 return status
             status = cur_node.searchNode(anItem)
             if status['found']:
                 break
-            else:
-                self.stackOfNodes.push(cur_node)
         status['fileIndex'] = cur_node.index  # stop idx
         return status
 
