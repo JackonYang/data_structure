@@ -187,9 +187,9 @@ class BTreeNode:
           where the object is, or should go if there is room in the node.
         '''
         import bisect
-        poistion = bisect.bisect_left(self.items, anItem)
-        found = poistion < len(self.items) and anItem == self.items[poistion]
-        return {'nodeIndex': poistion, 'found': found}
+        position = bisect.bisect_left(self.items, anItem)
+        found = position < len(self.items) and anItem == self.items[position]
+        return {'nodeIndex': position, 'found': found}
 
     def setIndex(self, anInteger):
         self.index = anInteger
