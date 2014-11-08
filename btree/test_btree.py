@@ -123,7 +123,6 @@ class test_btree(unittest.TestCase):
         res = bt.insert(35)
         self.assertEqual(res, 35)  # full, root
         bt.insert(98)
-        print bt
         bt.insert(201)
 
     def test_add_insert_full_d2(self):
