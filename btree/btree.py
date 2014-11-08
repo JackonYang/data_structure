@@ -280,6 +280,11 @@ class BTree:
             pass
 
         pos_node.removeItem(leaf_item)
+        if pos_node.isUnderFlow() and not self.stackOfNodes.isEmpty():
+            parent = self.stackOfNodes.pop()
+            # right first.
+            bro = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
+            print bro
         return pos_node
 
     def inorderOn(self, aFile):
