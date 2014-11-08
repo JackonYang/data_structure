@@ -144,12 +144,17 @@ class BTreeNode:
           aNode are left and right siblings with respect to an
           item within the parentNode.
         '''
+        # used by delete method
         degree = (self.getNumberOfKeys() + aNode.getNumberOfKeys() + 2) / 2
 
         n = BTreeNode(degree)
+
         n.copyItemsAndChildren(self, 0, self.getNumberOfKeys(), 0)
-        n.extendItemsAndChildren(parentNode, 0, 1, False)
-        n.extendItemsAndChildren(aNode, 0, aNode.getNumberOfKeys(), True)
+
+        parent_idx = parentNode.childIndexOf(self.index)
+        n.items[n.getNumberOfKeys()] = parentNode.items[parent_idx]
+
+        n.copyItemsAndChildren(aNode, 0, aNode.getNumberOfKeys(), n.getNumberOfKeys()+1)
         return n
 
     def insertItem(self, anItem, left = None, right = None):  
