@@ -66,6 +66,23 @@ class test_btree_node(unittest.TestCase):
         m = BTreeNode(4)
         self.assertTrue(m.isUnderFlow())
 
+    def test_findNext(self):
+        n = BTreeNode(4)
+        n.items[0:8] = [15,20,30,40,None,None,None,None]
+        n.child[0:9] = [101, 102, 103, 104, 105, None, None, None, None]
+        n.numberOfKeys = 4
+
+        self.assertEquals(n.findNext(103), 104)
+        self.assertEquals(n.findNext(103, inverse=True), 102)
+
+        # boundary check
+        self.assertEquals(n.findNext(104), 105)
+        self.assertEquals(n.findNext(102, inverse=True), 101)
+        self.assertEquals(n.findNext(105), None)
+        self.assertEquals(n.findNext(101, inverse=True), None)
+        self.assertEquals(n.findNext(100, inverse=True), None)
+        self.assertEquals(n.findNext(100, inverse=False), None)
+
     def test_addItemAndSplit(self):
         import copy
         n = BTreeNode(2)
@@ -238,6 +255,7 @@ class test_btree(unittest.TestCase):
         bt.insert(45)
         bt.insert(25)
         bt.delete(35)
+        bt.delete(38)
         print( bt )
 
 if __name__=='__main__':
@@ -251,6 +269,8 @@ if __name__=='__main__':
     suite.addTest(test_btree_node('test_isLeaf'))
     suite.addTest(test_btree_node('test_isUnderflow'))
     suite.addTest(test_btree_node('test_splitLast'))
+
+    suite.addTest(test_btree_node('test_findNext'))
 
     suite.addTest(test_btree('test_is_root'))
     suite.addTest(test_btree('test_add_insert_not_full'))

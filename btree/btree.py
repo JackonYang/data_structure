@@ -96,6 +96,18 @@ class BTreeNode:
             print( 'Error in childIndexOf' )
         return index
 
+    def findNext(self, node_idx, inverse=False):
+        childIdx = self.childIndexOf(node_idx)
+        if childIdx < 0:
+            return None
+        if inverse and childIdx > 0:
+            return self.child[childIdx-1]
+
+        if not inverse and childIdx < self.numberOfKeys:
+            return self.child[childIdx+1]
+
+        return None
+
     def clear(self):
         self.numberOfKeys = 0
         self.items = [None]*len(self.items)
