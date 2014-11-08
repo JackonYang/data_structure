@@ -280,10 +280,7 @@ class BTree:
                 parent.child[0] = pos_node.index
                 parent.child[1] = right_child.index
                 self.writeAt(parent.index, parent)
-            print parent
-            print pos_node
-            print right_child
-            return 'full'
+            return anItem
         
     def levelByLevel(self, aFile):
         ''' Print the nodes of the BTree level-by-level on aFile.
@@ -450,11 +447,11 @@ def main():
     bt.insert(35)
     print( bt )
 
-    return
-
     bt.insert(98)
     bt.insert(201)
     print( bt )
+
+    return
 
     bt.insert(73)
     bt.insert(29)
