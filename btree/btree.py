@@ -292,7 +292,7 @@ class BTree:
             right_node = bro_node
             bro_idx = 0
             cur_idx = cur_node.getNumberOfKeys()
-            cur_node.child[cur_node.getNumberOfKeys()+1] = bro_node.removeChild(bro_idx)
+            cur_node.child[cur_node.getNumberOfKeys()+1] = bro_node.removeChild(bro_idx) 
 
         parent_idx = parent_node.childIndexOf(left_node.index)
         parent_item = parent_node.items[parent_idx]
