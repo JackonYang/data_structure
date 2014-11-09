@@ -332,12 +332,16 @@ class BTree:
             if self.isRoot(parent_node.index):
                 self.rootNode = left_node
                 self.rootIndex = self.rootNode.index
+            self.recycle(parent_node)
             parent_node = left_node
+
+        self.recycle(right_node)
         return parent_node
 
 
     def getRightMin(self, start_node, item_idx):
         # assume not start_node.isLeaf():
+        self.stackOfNodes.push(start_node)
         node = self.readFrom(start_node.child[item_idx+1])
         while not node.isLeaf():
             self.stackOfNodes.push(node)
