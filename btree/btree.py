@@ -104,7 +104,7 @@ class BTreeNode:
         if inverse and childIdx > 0:
             return self.child[childIdx-1], inverse
 
-        if not inverse and childIdx < self.getNumberOfKeys():
+        if not inverse and childIdx < self.getNumberOfKeys()+1:
             return self.child[childIdx+1], inverse
 
         return None, inverse
@@ -314,8 +314,7 @@ class BTree:
         cur_node.insertItem(parent_item)
         parent_node.items[parent_idx] = bro_node.removeItem(bro_idx)
 
-    @classmethod
-    def combine(cls, cur_node, bro_node, parent_node, bro_left=False):
+    def combine(self, cur_node, bro_node, parent_node, bro_left=False):
         if bro_left:
             left_node = bro_node
             right_node = cur_node
@@ -324,18 +323,20 @@ class BTree:
             right_node = bro_node
 
         idx_parent_item = left_node._copyWithRight(right_node, parent_node)
-        if parent_node.getNumberOfKeys() > 2:
+        if parent_node.getNumberOfKeys() > 1:
             # delete right-node from tree
             parent_node.removeChild(idx_parent_item+1)
             # delete item from parent
             parent_node.removeItem(idx_parent_item)
         else:
+            if self.isRoot(parent_node.index):
+                self.rootNode = left_node
+                self.rootIndex = self.rootNode.index
             parent_node = left_node
         return parent_node
 
 
     def getRightMin(self, start_node, item_idx):
-        self.stackOfNodes.clear()
         # assume not start_node.isLeaf():
         node = self.readFrom(start_node.child[item_idx+1])
         while not node.isLeaf():
@@ -366,7 +367,9 @@ class BTree:
         while pos_node.isUnderFlow() and not self.stackOfNodes.isEmpty():
             parent = self.stackOfNodes.pop()
             # right first.
-            bro, isLhs = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
+            bro, isLhs = parent.findNext(pos_node.index)
+            if bro is None:
+                bro, isLhs = parent.findNext(pos_node.index, inverse=True)
             bro_node = self.readFrom(bro) if bro else None
             if bro_node is None:
                 print('delete {} error'.format(anItem))
@@ -709,7 +712,7 @@ def main():
     bt.insert(25)
     bt.delete(35)
     bt.delete(38)
-    bt.delete(25)
+    print bt.delete(25)
     bt.delete(38)
     print( bt )
 
