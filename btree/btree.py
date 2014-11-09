@@ -517,13 +517,15 @@ class BTree:
         status['fileIndex'] = cur_node.index  # stop idx
         return status
 
-
     def update(self, anItem):
         ''' If found, update the item with a matching key to be a
           deep copy of anItem and answer anItem.  If not, answer None.
         '''
-        pass
-    
+        position = self.searchTree(anItem)
+        if not position['found']:
+            return None
+        self.readFrom(position['fileIndex']).items[position['nodeIndex']] = deepcopy(anItem)
+        return anItem
 
     def writeAt(self, index, aNode):
         ''' Set the element in the btree with the given index
