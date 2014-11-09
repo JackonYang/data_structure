@@ -225,6 +225,31 @@ class test_btree(unittest.TestCase):
         res = bt.insert(10)
         self.assertEqual(bt.rootNode.items, [10, 27, 30, 50])
 
+    def test_del_balance(self):
+        p = BTreeNode(4)
+        p.items[0:8] = [15,20,30,40,None,None,None,None]
+        p.child[0:9] = [101, 102, 103, 104, 105, None, None, None, None]
+        p.setNumberOfKeys(4)
+
+        cur = BTreeNode(4)
+        cur.items[0:8] = [22,24,27,None,None,None,None,None]
+        cur.child[0:9] = [202, 203, 204, 205, None, None, None, None, None]
+        cur.setNumberOfKeys(3)
+
+        bro = BTreeNode(4)
+        bro.items[0:8] = [33,34,35,36,37,None,None,None]
+        bro.child[0:9] = [222, 223, 224, 225, 227, 229, None, None]
+        bro.setNumberOfKeys(5)
+
+        # parent item: 30
+        p.index = 1
+        cur.index = 103
+        bro.index = 104
+        BTree.balance(cur, bro, p)  # cur on left, bro on right
+        print p
+        print cur
+        print bro
+
     def test_add_insert_full(self):
         bt = BTree(1)
         bt.insert(50)
@@ -320,6 +345,8 @@ if __name__=='__main__':
     suite.addTest(test_btree('test_add_insert_not_full'))
     suite.addTest(test_btree('test_add_insert_full'))
     suite.addTest(test_btree('test_add_insert_full_d2'))
+
+    suite.addTest(test_btree('test_del_balance'))
 
     suite.addTest(test_btree('test_add_insert_deep'))
     suite.addTest(test_btree('test_add_insert_split_parent'))
