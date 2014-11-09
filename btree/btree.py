@@ -479,7 +479,11 @@ class BTree:
         ''' If found, answer a deep copy of the matching item.
           If not found, answer None
         '''
-        pass
+        position = self.searchTree(anItem)
+        if not position['found']:
+            return None
+
+        return deepcopy(self.readFrom(position['fileIndex']).items[position['nodeIndex']])
 
     def searchTree(self, anItem):
         ''' Answer a dictionary.  If there is a matching item, at
@@ -664,6 +668,7 @@ def main():
     t.delete(Person('',35))
     t.inorderOn(sys.stdout)
     
+    return
 
     print( ' # run#3 -------------------------------' )
     bt = BTree(2)
