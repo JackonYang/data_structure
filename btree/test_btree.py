@@ -257,7 +257,7 @@ class test_btree(unittest.TestCase):
         bt.insert(25)
         bt.delete(35)
         bt.delete(38)
-        print( bt )
+        #print( bt )
 
 if __name__=='__main__':
     suite=unittest.TestSuite()
