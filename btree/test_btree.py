@@ -225,7 +225,7 @@ class test_btree(unittest.TestCase):
         res = bt.insert(10)
         self.assertEqual(bt.rootNode.items, [10, 27, 30, 50])
 
-    def test_del_balance(self):
+    def test_del_balance_bro_right(self):
         p = BTreeNode(4)
         p.items[0:8] = [15,20,30,40,None,None,None,None]
         p.child[0:9] = [101, 102, 103, 104, 105, None, None, None, None]
@@ -255,6 +255,38 @@ class test_btree(unittest.TestCase):
 
         self.assertEquals(bro.items, [34, 35, 36, 37, None, None, None, None])
         self.assertEquals(bro.child, [223, 224, 225, 227, 229, None, None, None])
+
+    def test_del_balance_bro_left(self):
+        p = BTreeNode(4)
+        p.items[0:8] = [15,20,30,40,None,None,None,None]
+        p.child[0:9] = [101, 102, 103, 104, 105, None, None, None, None]
+        p.setNumberOfKeys(4)
+
+        cur = BTreeNode(4)
+        cur.items[0:8] = [33,34,37,None,None,None,None,None]
+        cur.child[0:9] = [202, 203, 204, 205, None, None, None, None, None]
+        cur.setNumberOfKeys(3)
+
+        bro = BTreeNode(4)
+        bro.items[0:8] = [22,24,25,26,27,None,None,None]
+        bro.child[0:9] = [222, 223, 224, 225, 227, 229, None, None]
+        bro.setNumberOfKeys(5)
+
+        # cur on left, bro on right. parent item: 30
+        p.index = 1
+        cur.index = 104
+        bro.index = 103
+        BTree.balance(cur, bro, p, bro_left=True)
+
+        self.assertEquals(p.items, [15, 20, 27, 40, None, None, None, None])
+        self.assertEquals(p.child, [101, 102, 103, 104, 105, None, None, None, None])
+
+        self.assertEquals(cur.items, [30, 33, 34, 37, None, None, None, None])
+        self.assertEquals(cur.child, [229, 202, 203, 204, 205, None, None, None, None])
+
+        self.assertEquals(bro.items, [22, 24, 25, 26, None, None, None, None])
+
+        self.assertEquals(bro.child, [222, 223, 224, 225, 227, None, None, None])
 
 
     def test_add_insert_full(self):
@@ -353,7 +385,8 @@ if __name__=='__main__':
     suite.addTest(test_btree('test_add_insert_full'))
     suite.addTest(test_btree('test_add_insert_full_d2'))
 
-    suite.addTest(test_btree('test_del_balance'))
+    suite.addTest(test_btree('test_del_balance_bro_right'))
+    suite.addTest(test_btree('test_del_balance_bro_left'))
 
     suite.addTest(test_btree('test_add_insert_deep'))
     suite.addTest(test_btree('test_add_insert_split_parent'))

@@ -281,14 +281,12 @@ class BTree:
 
     @classmethod
     def balance(cls, cur_node, bro_node, parent_node, bro_left=False):
-        child_left = None
-        child_right = None
         if bro_left:
             left_node = bro_node
             right_node = cur_node
             bro_idx = bro_node.getNumberOfKeys()-1
             cur_idx = 0
-            child_left = bro_node.removeChild(bro_idx)
+            cur_node.child = [bro_node.removeChild(bro_idx+1)] + cur_node.child[:-1]
         else:
             left_node = cur_node
             right_node = bro_node
