@@ -40,8 +40,8 @@ class test_btree_node(unittest.TestCase):
         self.assertFalse(n.isLeaf())
 
         p = BTreeNode(1)
-        p.items[0:8] = [40,50]
-        p.child[0:9] = [6,7,8]
+        p.items[0:2] = [40,50]
+        p.child[0:3] = [6,7,8]
         p.setNumberOfKeys(2)
         p.setIndex(17)
         self.assertFalse(p.isLeaf())
@@ -62,10 +62,11 @@ class test_btree_node(unittest.TestCase):
         self.assertEquals(n.items, [15,20,None,None,None,None,None,None])
 
         p = BTreeNode(1)
-        p.items[0:8] = [40,50]
-        p.child[0:9] = [6,7,8]
+        p.items[0:2] = [40,50]
+        p.child[0:3] = [6,7,8]
         p.setNumberOfKeys(2)
         self.assertEquals(p.removeItem(0), 40)
+        self.assertEquals(p.items, [50, None])
         self.assertEquals(p.getNumberOfKeys(), 1)
 
     def test_removeChild(self):
@@ -81,11 +82,11 @@ class test_btree_node(unittest.TestCase):
         self.assertEquals(n.child, [1,2,3,None,None,None,None,None,None])
 
         p = BTreeNode(1)
-        p.items[0:1] = [40,50]
-        p.child[0:2] = [6,7,8]
+        p.items[0:2] = [40,50]
+        p.child[0:3] = [6,7,8]
         p.setNumberOfKeys(2)
         self.assertEquals(p.removeChild(0), 6)
-        self.assertEquals(p.child, [7,8,None,None])
+        self.assertEquals(p.child, [7,8,None])
         self.assertEquals(p.getNumberOfKeys(), 2)
 
     def test_isUnderflow(self):
@@ -96,8 +97,8 @@ class test_btree_node(unittest.TestCase):
         self.assertTrue(n.isUnderFlow())
 
         p = BTreeNode(1)
-        p.items[0:8] = [40,50]
-        p.child[0:9] = [6,7,8]
+        p.items[0:2] = [40,50]
+        p.child[0:3] = [6,7,8]
         p.setNumberOfKeys(2)
         p.setIndex(17)
         self.assertFalse(p.isUnderFlow())
@@ -191,8 +192,8 @@ class test_btree_node(unittest.TestCase):
 
     def test_splitLast(self):
         n = BTreeNode(2)
-        n.items[0:8] = [15,35,None,None]
-        n.child[0:9] = [1,4,5,None,None]
+        n.items[0:4] = [15,35,None,None]
+        n.child[0:5] = [1,4,5,None,None]
         n.numberOfKeys = 2
         m = n.splitLast()
         self.assertEqual(m.items, [35, None, None, None])

@@ -205,9 +205,9 @@ class BTreeNode:
             return None
 
         target = self.child[index]
-        for i in range(index, self.getNumberOfKeys()+1):
+        for i in range(index, self.getNumberOfKeys()):
             self.child[i] = self.child[i+1]
-        self.child[self.getNumberOfKeys()+1] = None
+        self.child[self.getNumberOfKeys()] = None
         return target
 
     def removeItem(self, index):
@@ -220,10 +220,10 @@ class BTreeNode:
             return None
 
         target = self.items[index]
-        self.setNumberOfKeys(self.getNumberOfKeys()-1)
-        for i in range(index, self.getNumberOfKeys()):
+        for i in range(index, self.getNumberOfKeys()-1):
             self.items[i] = self.items[i+1]
-        self.items[self.getNumberOfKeys()] = None
+        self.items[self.getNumberOfKeys()-1] = None
+        self.setNumberOfKeys(self.getNumberOfKeys()-1)  # update
         return target
 
     def searchNode(self, anItem):
