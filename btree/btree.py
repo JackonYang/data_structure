@@ -459,7 +459,15 @@ class BTree:
     def levelByLevel(self, aFile):
         ''' Print the nodes of the BTree level-by-level on aFile.
         '''
-        pass
+        aFile.write('A level-by-level listing of the nodes:\n')
+        node_cache = MyQueue()
+        node_cache.enqueue(self.rootNode)
+        while not node_cache.isEmpty():
+            cur_node = node_cache.dequeue()
+            aFile.write(str(cur_node))
+            for child_idx in cur_node.child:
+                if child_idx is not None:
+                    node_cache.enqueue(self.readFrom(child_idx))
 
     def readFrom(self, index):
         ''' Answer the node at entry index of the btree structure.
