@@ -324,10 +324,13 @@ class BTree:
             right_node = bro_node
 
         idx_parent_item = left_node._copyWithRight(right_node, parent_node)
-        # delete item from parent
-        parent_node.removeItem(idx_parent_item)
-        # delete right-node from tree
-        parent_node.removeChild(idx_parent_item+1)
+        if parent_node.getNumberOfKeys() > 2:
+            # delete right-node from tree
+            parent_node.removeChild(idx_parent_item+1)
+            # delete item from parent
+            parent_node.removeItem(idx_parent_item)
+        else:
+            parent_node = left_node
         return parent_node
 
 
@@ -706,8 +709,6 @@ def main():
     bt.insert(25)
     bt.delete(35)
     bt.delete(38)
-    print( bt )
-    return
     bt.delete(25)
     bt.delete(38)
     print( bt )
