@@ -241,14 +241,21 @@ class test_btree(unittest.TestCase):
         bro.child[0:9] = [222, 223, 224, 225, 227, 229, None, None]
         bro.setNumberOfKeys(5)
 
-        # parent item: 30
+        # cur on left, bro on right. parent item: 30
         p.index = 1
         cur.index = 103
         bro.index = 104
-        BTree.balance(cur, bro, p)  # cur on left, bro on right
-        print p
-        print cur
-        print bro
+        BTree.balance(cur, bro, p)
+
+        self.assertEquals(p.items, [15, 20, 33, 40, None, None, None, None])
+        self.assertEquals(p.child, [101, 102, 103, 104, 105, None, None, None, None])
+
+        self.assertEquals(cur.items, [22, 24, 27, 30, None, None, None, None])
+        self.assertEquals(cur.child, [202, 203, 204, 205, 222, None, None, None, None])
+
+        self.assertEquals(bro.items, [34, 35, 36, 37, None, None, None, None])
+        self.assertEquals(bro.child, [223, 224, 225, 227, 229, None, None, None])
+
 
     def test_add_insert_full(self):
         bt = BTree(1)

@@ -279,7 +279,8 @@ class BTree:
                 st += str(node) 
         return st
 
-    def balance(self, cur_node, bro_node, parent_node, bro_left=False):
+    @classmethod
+    def balance(cls, cur_node, bro_node, parent_node, bro_left=False):
         child_left = None
         child_right = None
         if bro_left:
@@ -293,12 +294,12 @@ class BTree:
             right_node = bro_node
             bro_idx = 0
             cur_idx = cur_node.getNumberOfKeys()
-            child_right = bro_node.removeChild(bro_idx)
+            cur_node.child[cur_node.getNumberOfKeys()+1] = bro_node.removeChild(bro_idx)
 
         parent_idx = parent_node.childIndexOf(left_node.index)
         parent_item = parent_node.items[parent_idx]
 
-        cur_node.insertItem(parent_item, child_left, child_right)
+        cur_node.insertItem(parent_item)
         parent_node.items[parent_idx] = bro_node.removeItem(bro_idx)
 
     def delete(self, anItem):
