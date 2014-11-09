@@ -158,6 +158,20 @@ class BTreeNode:
         n.copyItemsAndChildren(aNode, 0, aNode.getNumberOfKeys(), n.getNumberOfKeys()+1)
         return n
 
+    def _copyWithRight(self, aNode, parentNode):  
+        '''Answer a node which contains all the items and children
+          of the receiver, followed by the parent item followed by
+          all the items and children of aNode.  The receiver and
+          aNode are left and right siblings with respect to an
+          item within the parentNode.
+        '''
+        # used by delete method
+        parent_item_idx = parentNode.childIndexOf(self.index)
+        self.items[self.getNumberOfKeys()] = parentNode.items[parent_item_idx]
+
+        self.copyItemsAndChildren(aNode, 0, aNode.getNumberOfKeys(), self.getNumberOfKeys()+1)
+        return parent_item_idx
+
     def insertItem(self, anItem, left = None, right = None):  
         ''' We assume that the receiver is not full. anItem is
           inserted into the receiver with child indices left and
@@ -300,6 +314,23 @@ class BTree:
         cur_node.insertItem(parent_item)
         parent_node.items[parent_idx] = bro_node.removeItem(bro_idx)
 
+    @classmethod
+    def combine(cls, cur_node, bro_node, parent_node, bro_left=False):
+        if bro_left:
+            left_node = bro_node
+            right_node = cur_node
+        else:
+            left_node = cur_node
+            right_node = bro_node
+
+        idx_parent_item = left_node._copyWithRight(right_node, parent_node)
+        # delete item from parent
+        parent_node.removeItem(idx_parent_item)
+        # delete right-node from tree
+        parent_node.removeChild(idx_parent_item+1)
+        return parent_node
+
+
     def getRightMin(self, start_node, item_idx):
         self.stackOfNodes.clear()
         # assume not start_node.isLeaf():
@@ -329,7 +360,7 @@ class BTree:
         else:
             pos_node.removeItem(idx_item)
 
-        if pos_node.isUnderFlow() and not self.stackOfNodes.isEmpty():
+        while pos_node.isUnderFlow() and not self.stackOfNodes.isEmpty():
             parent = self.stackOfNodes.pop()
             # right first.
             bro, isLhs = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
@@ -339,8 +370,9 @@ class BTree:
                 return None
             if not bro_node.isUnderFlow(1):
                 self.balance(pos_node, bro_node, parent, isLhs)
+                break  # done
             else:
-                print('combine')
+                pos_node = self.combine(pos_node, bro_node, parent, isLhs)
         return pos_node
 
     def inorderOn(self, aFile):
