@@ -334,7 +334,10 @@ class BTree:
             # right first.
             bro, isLhs = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
             bro_node = self.readFrom(bro) if bro else None
-            if bro_node and not bro_node.isUnderFlow(1):
+            if bro_node is None:
+                print('delete {} error'.format(anItem))
+                return None
+            if not bro_node.isUnderFlow(1):
                 self.balance(pos_node, bro_node, parent, isLhs)
             else:
                 print('combine')
