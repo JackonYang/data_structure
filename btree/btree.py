@@ -188,11 +188,11 @@ class BTreeNode:
         '''
         return (self.getNumberOfKeys() == len(self.items))
 
-    def isUnderFlow(self):
+    def isUnderFlow(self, delta=0):
         ''' Answer True if the receiver is underflow.
         If not, return False.
         '''
-        return (self.getNumberOfKeys() < len(self.items)/2)
+        return (self.getNumberOfKeys()-delta < len(self.items)/2)
 
     def removeChild(self, index):
         ''' If index is valid, remove and answer the child at
@@ -301,9 +301,11 @@ class BTree:
         parent_node.items[parent_idx] = bro_node.removeItem(bro_idx)
 
     def getRightMin(self, start_node, item_idx):
+        self.stackOfNodes.clear()
         # assume not start_node.isLeaf():
         node = self.readFrom(start_node.child[item_idx+1])
         while not node.isLeaf():
+            self.stackOfNodes.push(node)
             node = self.readFrom(node.child[0])
 
         return node
@@ -318,20 +320,24 @@ class BTree:
             return None
 
         pos_node = self.readFrom(position['fileIndex'])
-        leaf_item = position['nodeIndex']
+        idx_item = position['nodeIndex']
 
         if not pos_node.isLeaf():
-            min_node = self.getRightMin(pos_node, position['nodeIndex'])
-            print min_node
-            return
+            min_node = self.getRightMin(pos_node, idx_item)
+            pos_node.items[idx_item] = min_node.removeItem(0)
+            pos_node = min_node
+        else:
+            pos_node.removeItem(idx_item)
 
-        pos_node.removeItem(leaf_item)
         if pos_node.isUnderFlow() and not self.stackOfNodes.isEmpty():
             parent = self.stackOfNodes.pop()
             # right first.
             bro, isLhs = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
-            bro_node = self.readFrom(bro)
-            self.balance(pos_node, bro_node, parent, isLhs)
+            bro_node = self.readFrom(bro) if bro else None
+            if bro_node and not bro_node.isUnderFlow(1):
+                self.balance(pos_node, bro_node, parent, isLhs)
+            else:
+                print('combine')
         return pos_node
 
     def inorderOn(self, aFile):
