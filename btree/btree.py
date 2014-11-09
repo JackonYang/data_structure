@@ -691,8 +691,6 @@ def main():
     t.delete(Person('',35))
     t.inorderOn(sys.stdout)
     
-    return
-
     print( ' # run#3 -------------------------------' )
     bt = BTree(2)
     bt.insert(20)
