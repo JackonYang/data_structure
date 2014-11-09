@@ -209,13 +209,14 @@ class BTreeNode:
           gap.  Update the key count.  If the index is not valid,
           answer None.
         '''
-        if index >= self.getNumberOfKeys() or index < 0:  # TODO.bottom 
+        if index > self.getNumberOfKeys()-1 or index < 0:  # TODO.bottom 
             return None
 
         target = self.items[index]
         self.setNumberOfKeys(self.getNumberOfKeys()-1)
         for i in range(index, self.getNumberOfKeys()):
             self.items[i] = self.items[i+1]
+        self.items[self.getNumberOfKeys()] = None
         return target
 
     def searchNode(self, anItem):
