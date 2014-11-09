@@ -201,7 +201,14 @@ class BTreeNode:
           the child entries towards the start one position.
           The method removeItem will decrement numberOfKeys.
         '''
-        pass
+        if index > self.getNumberOfKeys() or index < 0:  # TODO.bottom 
+            return None
+
+        target = self.child[index]
+        for i in range(index, self.getNumberOfKeys()+1):
+            self.child[i] = self.child[i+1]
+        self.child[self.getNumberOfKeys()+1] = None
+        return target
 
     def removeItem(self, index):
         ''' If index is valid, remove and answer the item at

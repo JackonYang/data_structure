@@ -68,6 +68,26 @@ class test_btree_node(unittest.TestCase):
         self.assertEquals(p.removeItem(0), 40)
         self.assertEquals(p.getNumberOfKeys(), 1)
 
+    def test_removeChild(self):
+        n = BTreeNode(4)
+        n.items[0:8] = [15,20,30,35,None,None,None,None]
+        n.child[0:9] = [1,2,3,4,5,None,None,None,None]
+        n.setNumberOfKeys(4)
+        self.assertEquals(n.removeChild(3), 4)
+        self.assertEquals(n.getNumberOfKeys(), 4)
+        self.assertEquals(n.child, [1,2,3,5,None,None,None,None,None])
+        self.assertEquals(n.removeChild(3), 5)
+        self.assertEquals(n.getNumberOfKeys(), 4)
+        self.assertEquals(n.child, [1,2,3,None,None,None,None,None,None])
+
+        p = BTreeNode(1)
+        p.items[0:1] = [40,50]
+        p.child[0:2] = [6,7,8]
+        p.setNumberOfKeys(2)
+        self.assertEquals(p.removeChild(0), 6)
+        self.assertEquals(p.child, [7,8,None,None])
+        self.assertEquals(p.getNumberOfKeys(), 2)
+
     def test_isUnderflow(self):
         n = BTreeNode(4)
         n.items[0:8] = [15,20,30,None,None,None,None,None]
@@ -291,6 +311,7 @@ if __name__=='__main__':
     suite.addTest(test_btree_node('test_splitLast'))
 
     suite.addTest(test_btree_node('test_removeItem'))
+    suite.addTest(test_btree_node('test_removeChild'))
 
     suite.addTest(test_btree_node('test_findNext'))
 
