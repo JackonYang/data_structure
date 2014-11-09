@@ -300,6 +300,14 @@ class BTree:
         cur_node.insertItem(parent_item)
         parent_node.items[parent_idx] = bro_node.removeItem(bro_idx)
 
+    def getRightMin(self, start_node, item_idx):
+        # assume not start_node.isLeaf():
+        node = self.readFrom(start_node.child[item_idx+1])
+        while not node.isLeaf():
+            node = self.readFrom(node.child[0])
+
+        return node
+
     def delete(self, anItem):
         ''' Answer None if a matching item is not found.  If found,
           answer the entire item.  
@@ -313,7 +321,9 @@ class BTree:
         leaf_item = position['nodeIndex']
 
         if not pos_node.isLeaf():
-            pass
+            min_node = self.getRightMin(pos_node, position['nodeIndex'])
+            print min_node
+            return
 
         pos_node.removeItem(leaf_item)
         if pos_node.isUnderFlow() and not self.stackOfNodes.isEmpty():
@@ -653,10 +663,10 @@ def main():
     bt.insert(24)
     bt.insert(45)
     bt.insert(25)
-    print( bt )
-    return
     bt.delete(35)
     bt.delete(38)
+    print( bt )
+    return
     bt.delete(25)
     bt.delete(38)
     print( bt )
