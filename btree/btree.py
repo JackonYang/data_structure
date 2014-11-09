@@ -399,7 +399,20 @@ class BTree:
           rooted at index, in inorder on aFile.
         '''
 
-        pass
+        cur_node = self.readFrom(index)
+        if cur_node is None:
+            return None
+
+        if cur_node.isLeaf():
+            for i in range(cur_node.getNumberOfKeys()):
+                aFile.write(str(cur_node.items[i]))
+                aFile.write('\n')
+            return None
+        for i in range(cur_node.getNumberOfKeys()):
+            self.inorderOnFrom(aFile, cur_node.child[i])
+            aFile.write(str(cur_node.items[i]))
+            aFile.write('\n')
+        self.inorderOnFrom(aFile, cur_node.child[cur_node.getNumberOfKeys()])
 
     def isRoot(self, idx):
         return self.rootIndex == idx
