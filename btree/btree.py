@@ -279,6 +279,28 @@ class BTree:
                 st += str(node) 
         return st
 
+    def balance(self, cur_node, bro_node, parent_node, bro_left=False):
+        child_left = None
+        child_right = None
+        if bro_left:
+            left_node = bro_node
+            right_node = cur_node
+            bro_idx = bro_node.getNumberOfKeys()-1
+            cur_idx = 0
+            child_left = bro_node.removeChild(bro_idx)
+        else:
+            left_node = cur_node
+            right_node = bro_node
+            bro_idx = 0
+            cur_idx = cur_node.getNumberOfKeys()
+            child_right = bro_node.removeChild(bro_idx)
+
+        parent_idx = parent_node.childIndexOf(left_node.index)
+        parent_item = parent_node.items[parent_idx]
+
+        cur_node.insertItem(parent_item, child_left, child_right)
+        parent_node.items[parent_idx] = bro_node.removeItem(bro_idx)
+
     def delete(self, anItem):
         ''' Answer None if a matching item is not found.  If found,
           answer the entire item.  
@@ -299,7 +321,8 @@ class BTree:
             parent = self.stackOfNodes.pop()
             # right first.
             bro, isLhs = parent.findNext(pos_node.index) or parent.findNext(pos_node.index, inverse=True)
-            print(bro, isLhs)
+            bro_node = self.readFrom(bro)
+            self.balance(pos_node, bro_node, parent, isLhs)
         return pos_node
 
     def inorderOn(self, aFile):
