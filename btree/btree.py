@@ -129,15 +129,6 @@ class BTreeNode:
         # next child. 1 more child than items
         self.child[self.getNumberOfKeys()] = fromNode.child[finish]
 
-    def extendItemsAndChildren(self, fromNode, start, delta, copyChild=True):
-        for i in range(delta):
-            self.items[self.getNumberOfKeys()+i] = fromNode.items[start+i]
-        if copyChild:
-            for i in range(delta+1):
-                self.child[self.getNumberOfKeys()+i] = fromNode.child[start+i]
-
-        self.setNumberOfKeys(self.getNumberOfKeys()+delta)
-    
     def copyWithRight(self, aNode, parentNode):  
         '''Answer a node which contains all the items and children
           of the receiver, followed by the parent item followed by
@@ -337,7 +328,6 @@ class BTree:
 
         self.recycle(right_node)
         return parent_node
-
 
     def getRightMin(self, start_node, item_idx):
         # assume not start_node.isLeaf():
@@ -742,7 +732,7 @@ def main():
     bt.insert(25)
     bt.delete(35)
     bt.delete(38)
-    print bt.delete(25)
+    bt.delete(25)
     bt.delete(38)
     print( bt )
 
