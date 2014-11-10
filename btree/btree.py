@@ -241,10 +241,13 @@ class BTreeNode:
           are < anItem.  In other words, nodeIndex is the place in the node
           where the object is, or should go if there is room in the node.
         '''
-        import bisect
-        position = bisect.bisect_left(self.items[:self.getNumberOfKeys()], anItem)
-        found = position < len(self.items) and anItem == self.items[position]
-        return {'nodeIndex': position, 'found': found}
+        if anItem in self.items:
+            return {'nodeIndex': self.items.index(anItem), 'found': True}
+
+        for i in range(0, self.getNumberOfKeys()):
+            if anItem < self.items[i]:
+                return {'nodeIndex': i, 'found': False}
+        return {'nodeIndex': self.getNumberOfKeys(), 'found': False}
 
     def setIndex(self, anInteger):
         self.index = anInteger
